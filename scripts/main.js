@@ -74,6 +74,7 @@ async function createWindow ()
   });
 
   mainWindow.loadURL(homePage);
+  mainWindow.maximize();
 
   /*
   uncomment this to debug any errors with loading GFN landing page
@@ -118,16 +119,6 @@ app.whenReady().then(async () =>
   });
 
   electronLocalshortcut.register('Alt+F4', async () =>
-  {
-    app.quit();
-  });
-
-  electronLocalshortcut.register('Alt+Home', async () =>
-  {
-    BrowserWindow.getAllWindows()[0].loadURL(homePage);
-  });
-
-  electronLocalshortcut.register('F4', async () =>
   {
     app.quit();
   });

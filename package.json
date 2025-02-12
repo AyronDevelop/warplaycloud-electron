@@ -18,11 +18,22 @@
       "category": "Games",
       "artifactName": "${name}_${version}_linux.${ext}"
     },
-    "extraFiles": [
-      "com.github.hmlendea.${name}.desktop"
-    ]
+    "win": {
+      "target": [
+        "nsis",
+        "zip"
+      ],
+      "artifactName": "${name}_${version}_win.${ext}"
+    },
+    "mac": {
+      "target": [
+        "dmg",
+        "zip"
+      ],
+      "artifactName": "${name}_${version}_mac.${ext}"
+    }
   },
-  "author": "Horațiu Mlendea <io.github.hmlendea.cnzq9@SimpleLogin.fr>",
+  "author": "WARPLAY.CLOUD & Horațiu Mlendea <io.github.hmlendea.cnzq9@SimpleLogin.fr>",
   "license": "GPL-3.0",
   "devDependencies": {
     "electron": "^29.4.6",

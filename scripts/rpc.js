@@ -11,13 +11,10 @@ function DiscordRPC (title)
 
     let d;
 
-    if (title.includes('on WARPLAY.CLOUD'))
+    if (title.includes('WARPLAY.CLOUD'))
     {
         d = title;
-    } else
-    {
-        d = "Home on WARPLAY.CLOUD";
-    };
+    }
 
     client.updatePresence({
         details: d,
