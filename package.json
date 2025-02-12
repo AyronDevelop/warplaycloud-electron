@@ -23,7 +23,8 @@
         "nsis",
         "zip"
       ],
-      "artifactName": "${name}_${version}_win.${ext}"
+      "artifactName": "${name}_${version}_win.${ext}",
+      "icon": "path/to/your/icon.ico"
     },
     "mac": {
       "target": [
