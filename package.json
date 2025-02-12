@@ -1,9 +1,8 @@
 {
-  "name": "geforcenow-electron",
-  "appId": "com.github.hmlendea.${name}",
-  "productName": "GeForce NOW",
-  "version": "2.1.0",
-  "description": "A Linux desktop web app for GeForce NOW",
+  "name": "warplaycloud-electron",
+  "productName": "WARPLAY.CLOUD",
+  "version": "1.0.0",
+  "description": "A Crossplatform desktop web app for WARPLAY.CLOUD",
   "main": "scripts/main.js",
   "scripts": {
     "start": "electron .",
@@ -23,13 +22,6 @@
       "com.github.hmlendea.${name}.desktop"
     ]
   },
-  "repository": "https://github.com/hmlendea/gfn-electron",
-  "keywords": [
-    "Electron",
-    "gfn",
-    "geforcenow",
-    "geforce-now"
-  ],
   "author": "Horațiu Mlendea <io.github.hmlendea.cnzq9@SimpleLogin.fr>",
   "license": "GPL-3.0",
   "devDependencies": {

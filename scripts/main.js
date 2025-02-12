@@ -6,7 +6,7 @@ const path = require('path');
 const { DiscordRPC } = require('./rpc.js');
 const { switchFullscreenState } = require('./windowManager.js');
 
-var homePage = 'https://play.geforcenow.com';
+var homePage = 'https://dashboard.warplay.cloud';
 var userAgent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36';
 
 console.log('Using user agent: ' + userAgent);
@@ -25,6 +25,11 @@ app.commandLine.appendSwitch('enable-native-gpu-memory-buffers');
 app.commandLine.appendSwitch('enable-gpu-rasterization');
 app.commandLine.appendSwitch('enable-zero-copy');
 app.commandLine.appendSwitch('enable-gpu-memory-buffer-video-frames');
+
+app.commandLine.appendSwitch('disable-background-media-suspend');
+app.commandLine.appendSwitch('autoplay-policy', 'no-user-gesture-required');
+app.commandLine.appendSwitch('disable-features', 'MediaSessionService');
+
 
 // To identify a possible stable 'use-gl' switch implementation for our application, we utilize a config file that stores the number of crashes.
 // On Linux, the crash count is likely stored here: /home/[username]/.config/GeForce NOW/config.json.
@@ -45,7 +50,8 @@ const config = fs.existsSync(configPath) ?
   JSON.parse(fs.readFileSync(configPath, 'utf-8')) :
   { crashCount: 0 };
 
-switch(config.crashCount) {
+switch (config.crashCount)
+{
   case 0:
     app.commandLine.appendSwitch('use-gl', 'angle');
     break;
@@ -56,7 +62,8 @@ switch(config.crashCount) {
     app.disableHardwareAcceleration();
 }
 
-async function createWindow() {
+async function createWindow ()
+{
   const mainWindow = new BrowserWindow({
     fullscreenable: true,
     webPreferences: {
@@ -66,11 +73,7 @@ async function createWindow() {
     },
   });
 
-  if (process.argv.includes('--direct-start')) {
-    mainWindow.loadURL('https://play.geforcenow.com/mall/#/streamer?launchSource=GeForceNOW&cmsId=' + process.argv[process.argv.indexOf('--direct-start') + 1]);
-  } else {
-    mainWindow.loadURL(homePage);
-  }
+  mainWindow.loadURL(homePage);
 
   /*
   uncomment this to debug any errors with loading GFN landing page
@@ -84,98 +87,123 @@ async function createWindow() {
 
 let discordIsRunning = false;
 
-app.whenReady().then(async () => {
+app.whenReady().then(async () =>
+{
   // Ensure isDiscordRunning is called before createWindow to prevent the 'browser-window-created' event from triggering before the Discord check is complete.
   discordIsRunning = await isDiscordRunning();
 
   createWindow();
 
-  if (discordIsRunning) {
-    DiscordRPC('GeForce NOW');
+  if (discordIsRunning)
+  {
+    DiscordRPC('WARPLAY.CLOUD');
   }
 
-  app.on('activate', async function () {
-    if (BrowserWindow.getAllWindows().length === 0) {
+  app.on('activate', async function ()
+  {
+    if (BrowserWindow.getAllWindows().length === 0)
+    {
       createWindow();
     }
   });
 
-  electronLocalshortcut.register('Super+F', async () => {
+  electronLocalshortcut.register('Super+F', async () =>
+  {
     switchFullscreenState();
   });
 
-  electronLocalshortcut.register('F11', async () => {
+  electronLocalshortcut.register('F11', async () =>
+  {
     switchFullscreenState();
   });
 
-  electronLocalshortcut.register('Alt+F4', async () => {
+  electronLocalshortcut.register('Alt+F4', async () =>
+  {
     app.quit();
   });
 
-  electronLocalshortcut.register('Alt+Home', async () => {
+  electronLocalshortcut.register('Alt+Home', async () =>
+  {
     BrowserWindow.getAllWindows()[0].loadURL(homePage);
   });
 
-  electronLocalshortcut.register('F4', async () => {
+  electronLocalshortcut.register('F4', async () =>
+  {
     app.quit();
   });
 
-  electronLocalshortcut.register('Control+Shift+I', () => {
+  electronLocalshortcut.register('Control+Shift+I', () =>
+  {
     BrowserWindow.getAllWindows()[0].webContents.toggleDevTools();
   });
 });
 
-app.on('browser-window-created', async function (e, window) {
+app.on('browser-window-created', async function (e, window)
+{
   window.setBackgroundColor('#1A1D1F');
   window.setMenu(null);
 
   window.webContents.setUserAgent(userAgent);
 
-  window.webContents.on('new-window', (event, url) => {
+  window.webContents.on('new-window', (event, url) =>
+  {
     event.preventDefault();
     BrowserWindow.getAllWindows()[0].loadURL(url);
   });
 
-  if (discordIsRunning) {
-    window.on('page-title-updated', async function (e, title) {
+  if (discordIsRunning)
+  {
+    window.on('page-title-updated', async function (e, title)
+    {
       DiscordRPC(title);
     });
   }
 });
 
-app.on('child-process-gone', (event, details) => {
-  if (details.type === 'GPU' && details.reason === 'crashed') {
-      config.crashCount++;
-      fs.writeFileSync(configPath, JSON.stringify(config));
+app.on('child-process-gone', (event, details) =>
+{
+  if (details.type === 'GPU' && details.reason === 'crashed')
+  {
+    config.crashCount++;
+    fs.writeFileSync(configPath, JSON.stringify(config));
 
-      console.log("Initiating application restart with an alternative 'use-gl' switch implementation or with hardware acceleration disabled, aiming to improve stability or performance based on prior execution outcomes.");
+    console.log("Initiating application restart with an alternative 'use-gl' switch implementation or with hardware acceleration disabled, aiming to improve stability or performance based on prior execution outcomes.");
 
-      app.relaunch();
-      app.exit(0);
+    app.relaunch();
+    app.exit(0);
   }
 });
 
-app.on('will-quit', async () => {
+app.on('will-quit', async () =>
+{
   electronLocalshortcut.unregisterAll();
 });
 
-app.on('window-all-closed', async function () {
-  if (process.platform !== 'darwin') {
+app.on('window-all-closed', async function ()
+{
+  if (process.platform !== 'darwin')
+  {
     app.quit();
   }
 });
 
-function isDiscordRunning() {
-  return new Promise(resolve => {
-      findProcess('name', 'Discord').then(list => {
-          if (list.length > 0) {
-              resolve(true);
-          } else {
-              resolve(false);
-          }
-      }).catch(error => {
-          console.log('Error checking Discord process:', error);
-          resolve(false);
-      });
+function isDiscordRunning ()
+{
+  return new Promise(resolve =>
+  {
+    findProcess('name', 'Discord').then(list =>
+    {
+      if (list.length > 0)
+      {
+        resolve(true);
+      } else
+      {
+        resolve(false);
+      }
+    }).catch(error =>
+    {
+      console.log('Error checking Discord process:', error);
+      resolve(false);
+    });
   });
 }
