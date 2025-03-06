@@ -18,17 +18,15 @@ app.commandLine.appendSwitch(
   'disable-features',
   'UseChromeOSDirectVideoDecoder'
 );
-app.commandLine.appendSwitch('enable-accelerated-mjpeg-decode');
 app.commandLine.appendSwitch('enable-accelerated-video');
 app.commandLine.appendSwitch('ignore-gpu-blocklist');
-app.commandLine.appendSwitch('enable-native-gpu-memory-buffers');
+// app.commandLine.appendSwitch('enable-native-gpu-memory-buffers');
 app.commandLine.appendSwitch('enable-gpu-rasterization');
 app.commandLine.appendSwitch('enable-zero-copy');
 app.commandLine.appendSwitch('enable-gpu-memory-buffer-video-frames');
 
 app.commandLine.appendSwitch('disable-background-media-suspend');
-app.commandLine.appendSwitch('autoplay-policy', 'no-user-gesture-required');
-app.commandLine.appendSwitch('disable-features', 'MediaSessionService');
+app.commandLine.appendSwitch('disable-gpu-vsync');
 
 
 // To identify a possible stable 'use-gl' switch implementation for our application, we utilize a config file that stores the number of crashes.
